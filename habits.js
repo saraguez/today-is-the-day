@@ -1,0 +1,8 @@
+window.render90=function(){
+ const end=new Date(selected+'T12:00:00'),dates=Array.from({length:90},(_,i)=>{let d=new Date(end);d.setDate(d.getDate()-89+i);return iso(d)}),names=[...habits,'10-minute Gratitude'];
+ const checked=(k,i)=>i===5?!!state.days[k]?.morning?.[4]:!!state.days[k]?.care?.[i];
+ document.getElementById('range90').textContent=new Date(dates[0]+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' – '+end.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+ const summary=document.getElementById('habitSummary'),grid=document.getElementById('heatmap90');summary.replaceChildren();grid.replaceChildren();
+ names.forEach((name,i)=>{const total=dates.filter(k=>checked(k,i)).length;let streak=0;for(let j=89;j>=0&&checked(dates[j],i);j--)streak++;
+ const card=document.createElement('div');card.className='habit-summary-card';const title=document.createElement('h3');title.textContent=name;const stats=document.createElement('p');stats.textContent=total+'/90 days · '+Math.round(total/90*100)+'% · '+streak+' day streak';card.append(title,stats);summary.append(card);
+ const row=document.createElement('div');row.className='heatmap-row';const label=document.createElement('h3');label.textContent=name;row.append(label);const squares=document.createElement('div');squares.className='habit-squares';dates.forEach(date=>{const box=document.createElement('input');box.type='checkbox';box.checked=checked(date,i);box.title=date+' · '+name;box.setAttribute('aria-label',name+' on '+date);box.onchange=()=>{if(i===5)day(date).morning[4]=box.checked;else day(date).care[i]=box.checked;save();lists();tracker()};squares.append(box)});row.append(squares);grid.append(row)})};window.render90();
