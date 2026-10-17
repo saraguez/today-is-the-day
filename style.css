@@ -57,4 +57,4 @@ dialog{width:min(510px,calc(100% - 32px));background:var(--paper);color:var(--in
 .daily-review>.section-head{position:absolute;left:0;right:0;top:0;height:42px;justify-content:center;margin:0;padding:8px 12px;background:linear-gradient(95deg,#efd8cebb,#f5e6dd);border-radius:17px 17px 0 0}.daily-review>.section-head h2{line-height:1.25}
 .daily-review #weekRecap{margin:8px 0 22px;padding:14px 16px;border:1px solid var(--line);border-radius:9px;background:#fbf2ec}.review-day{padding:9px 0;border-bottom:1px solid #dfc8b888}.review-day:last-child{border-bottom:0}.review-day summary{cursor:pointer;color:#87553d;font:600 14px -apple-system,sans-serif}.review-day p{margin:8px 0 0;font:13px/1.5 -apple-system,sans-serif}.review-day p strong{color:#673a2b}.review-ink-preview{display:block;max-width:min(100%,480px);max-height:240px;object-fit:contain;object-position:left center;margin-top:6px;border:1px solid var(--line);border-radius:5px;background:#fffaf5}
 
-@media(min-width:701px){.todo-section{padding-bottom:94px}}
+@media(min-width:701px){.todo-section{padding-bottom:58px}}
