@@ -127,3 +127,22 @@ body[data-theme] #routineEditor .routine-title-field{display:block;margin:10px 0
 body[data-theme] #routineEditor .routine-title-field input{display:block;width:100%;margin-top:5px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--input-bg);color:var(--ink);font:16px Georgia,serif}
 body[data-theme] .section-title-rename{cursor:pointer}
 body[data-theme] #plannerTitleEdit .heading-pencil{display:none!important}
+
+/* Dojo Calm follows the approved washi, shoji, ink, and vermilion concept. */
+body[data-theme=dojo]{background-image:repeating-linear-gradient(90deg,transparent 0 59px,#746f6809 60px 61px),repeating-linear-gradient(0deg,transparent 0 59px,#746f6809 60px 61px),linear-gradient(135deg,#eee8de,#e5dfd4)!important}
+body[data-theme=dojo] .shell{background-image:linear-gradient(180deg,#f8f3e9f2,#f8f3e9f8),repeating-linear-gradient(90deg,transparent 0 79px,#776e6008 80px 81px)!important}
+body[data-theme=dojo] header{isolation:isolate;background-image:radial-gradient(ellipse at 82% 26%,#b65a4320 0 65px,transparent 66px),linear-gradient(180deg,transparent 72%,#e8d8cb38 100%)}
+body[data-theme=dojo] header:before{display:block!important;content:'';position:absolute;inset:0 -24px auto auto;width:min(46%,420px);height:190px;z-index:0;pointer-events:none;opacity:.24;background:repeating-linear-gradient(90deg,transparent 0 34px,#59616a 35px 36px),repeating-linear-gradient(0deg,transparent 0 34px,#59616a 35px 36px);mask-image:linear-gradient(90deg,transparent,#000 25%)}
+body[data-theme=dojo] header:after{content:'';position:absolute;z-index:0;pointer-events:none;right:7%;top:22px;width:250px;height:150px;opacity:.45;background:radial-gradient(circle at 73% 32%,#bd654d 0 29px,transparent 30px),radial-gradient(ellipse at 47% 100%,#7d899020 0 30%,transparent 31%),radial-gradient(ellipse at 20% 100%,#5c697014 0 37%,transparent 38%)}
+body[data-theme=dojo] header>*{position:relative;z-index:1}
+body[data-theme=dojo] .brand:before{content:'';display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:var(--accent);vertical-align:1px;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent),transparent 88%)}
+body[data-theme=dojo] h1{font-weight:500;letter-spacing:-2px}
+body[data-theme=dojo] .section-head,body[data-theme=dojo] .week-glance>.section-head,body[data-theme=dojo] .daily-review>.section-head{background:var(--header-bg)!important;border-bottom:1px solid var(--line)!important}
+body[data-theme=dojo] section{border-radius:14px}
+body[data-theme=dojo] .care{background:var(--care-bg)}
+body[data-theme=dojo] .menu{background:var(--menu-bg)}
+body[data-theme=dojo] .daily-trust{background:radial-gradient(ellipse at bottom left,color-mix(in srgb,var(--rose),transparent 35%),transparent 72%),var(--trust-bg)}
+body[data-theme=dojo] footer>span{background:var(--footer-bg);color:var(--footer-text)}
+body[data-theme=dojo] .theme-preview[data-theme=dojo]{--preview-paper:#f8f3e9;--preview-panel:#ead9cd;--preview-ink:#282b2d;--preview-muted:#a95640;background-image:repeating-linear-gradient(90deg,transparent 0 24px,#746f6810 25px 26px),radial-gradient(circle at 90% 18%,#b65a4330 0 20px,transparent 21px);border-radius:8px;border-top:0}
+body[data-theme=dojo] .theme-preview[data-theme=dojo] strong{text-transform:none;letter-spacing:0}
+@media(max-width:700px){body[data-theme=dojo] header:after{right:2%;top:14px;width:150px;height:100px;opacity:.3}body[data-theme=dojo] header:before{height:145px}}
