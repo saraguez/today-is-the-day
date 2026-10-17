@@ -123,3 +123,6 @@ body[data-theme] .todo-delete,body[data-theme] .remove-section-button{color:var(
 body[data-theme] .todo-delete:hover,body[data-theme] .remove-section-button:hover{background:var(--hover-bg);color:var(--accent-dark)}
 body[data-theme] .theme-storyboard[aria-pressed=true]{outline-color:var(--accent)}
 body[data-theme]:not([data-theme=flower]) header:before{display:none}
+body[data-theme] #routineEditor .routine-title-field{display:block;margin:10px 0 6px;font:14px -apple-system,sans-serif;color:var(--muted)}
+body[data-theme] #routineEditor .routine-title-field input{display:block;width:100%;margin-top:5px;padding:9px 10px;border:1px solid var(--line);border-radius:6px;background:var(--input-bg);color:var(--ink);font:16px Georgia,serif}
+body[data-theme] .section-title-rename{cursor:pointer}
