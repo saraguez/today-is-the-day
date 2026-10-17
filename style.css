@@ -66,3 +66,5 @@ dialog{width:min(510px,calc(100% - 32px));background:var(--paper);color:var(--in
 @media(min-width:701px){.column>.notes-section{flex:1 0 auto;display:flex;flex-direction:column}.notes-section>.writing.lined{flex:1 0 160px;min-height:160px}}
 
 .pull-refresh-indicator{position:fixed;z-index:1000;top:calc(env(safe-area-inset-top,0px) + 8px);left:50%;transform:translate(-50%,-90px);padding:8px 14px;border:1px solid var(--line);border-radius:24px;background:#fcf7f1ee;color:#87553d;font:12px -apple-system,sans-serif;box-shadow:0 3px 14px #4c251b18;opacity:0;pointer-events:none;transition:transform .16s ease,opacity .16s ease}.pull-refresh-indicator.pulling{transform:translate(-50%,calc(var(--pull-distance) - 90px));opacity:1}.pull-refresh-indicator.ready{background:#f1d9d0}.pull-refresh-indicator.refreshing{transform:translate(-50%,8px);opacity:1}
+
+.todo-delete{border:0;padding:2px 7px;min-width:28px;color:#9d7763;font:19px/1 -apple-system,sans-serif}.todo-delete:hover{background:#f1d9d0;color:#6f392d}
