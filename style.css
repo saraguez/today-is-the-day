@@ -206,3 +206,189 @@ body[data-theme=dojo] .theme-preview[data-theme=dojo] strong{text-transform:none
  body[data-theme=dojo] .care .check-row{min-height:105px}
  body[data-theme=dojo] .section-head:before{left:9px;width:11px}
 }
+
+/* Bring Dojo Calm closer to its sunlit room inspiration. */
+body[data-theme=dojo]{
+ background-image:linear-gradient(#e9e3d86e,#e9e3d89c),url('dojo-room.jpg')!important;
+ background-position:center top!important;
+}
+body[data-theme=dojo] .shell{
+ max-width:1280px;
+ padding:28px 42px 36px;
+ background-image:linear-gradient(180deg,#f8f3e9e8,#f8f3e9eb),repeating-linear-gradient(90deg,transparent 0 89px,#746f6808 90px 91px)!important;
+}
+body[data-theme=dojo] header{
+ min-height:310px;
+ margin-bottom:24px;
+ background-image:linear-gradient(90deg,#f8f3e9ed 0%,#f8f3e9d0 30%,#f8f3e99e 58%,#f8f3e970 100%),url('dojo-room.jpg');
+ background-position:center 57%;
+ box-shadow:inset 0 0 34px #fffaf180,0 7px 20px #3d30250d;
+}
+body[data-theme=dojo] h1{color:#302d2a;text-shadow:0 1px 0 #fff9,0 2px 12px #f8f3e9a8}
+body[data-theme=dojo] .planner-subtitle-button{text-shadow:0 1px 0 #fff9}
+body[data-theme=dojo] section,body[data-theme=dojo] .daily-trust{
+ background-color:#f8f3e9ed;
+ background-image:linear-gradient(145deg,#fffdf9c7,transparent 58%),repeating-linear-gradient(0deg,transparent 0 5px,#7e6b5505 6px 7px);
+ border-color:#cdbca9;
+ box-shadow:0 7px 22px #3d302510,inset 0 1px #fff;
+}
+body[data-theme=dojo] .section-head,body[data-theme=dojo] .week-glance>.section-head,body[data-theme=dojo] .daily-review>.section-head{
+ background:linear-gradient(100deg,#e5d3c4,#f2e7dc)!important;
+ border-bottom-color:#cdbca9!important;
+}
+body[data-theme=dojo] .section-head:before{width:20px;height:3px;opacity:.7}
+body[data-theme=dojo] .care{background-color:#eee7da;background-image:linear-gradient(130deg,#f7f1e6,#e9e1d4)!important}
+body[data-theme=dojo] .care .check-row{background:#fbf8f0;border-color:#d2c3b1;box-shadow:0 3px 10px #44362a0c}
+body[data-theme=dojo] .menu{background-color:#f8f3e9!important}
+body[data-theme=dojo] .menu .writing,
+body[data-theme=dojo] .notes-section .writing{
+ border:1px solid #d7c8b7;border-radius:10px;background-color:#fffaf2;box-shadow:inset 0 1px 5px #44362a0a;
+}
+body[data-theme=dojo] .menu .typed-writing,
+body[data-theme=dojo] .notes-section .typed-writing{background:transparent!important}
+body[data-theme=dojo] .todo-section .check-row{background:linear-gradient(90deg,#fffaf260,transparent);border-bottom-color:#d6c7b7}
+body[data-theme=dojo] .todo-section #addTodo input{border-bottom-color:#a99a89}
+body[data-theme=dojo] footer>span{border-top:1px solid #d2c2b0;border-bottom:1px solid #d2c2b0;background:linear-gradient(90deg,transparent,#e9ded1c9,transparent)}
+@media(max-width:700px){
+ body[data-theme=dojo] .shell{padding:17px 17px 28px}
+ body[data-theme=dojo] header{min-height:270px;margin:0 -2px 14px;padding:27px 8px 18px;background-position:58% center}
+ body[data-theme=dojo] section,body[data-theme=dojo] .daily-trust{background-color:#f8f3e9f2}
+}
+
+/* Dojo dashboard composition follows the Japanese room and paper-card reference. */
+body[data-theme=dojo]{min-height:100vh;background:#d8c9b8 url('dojo-room.jpg') center top/cover fixed!important;color:#282b2d}
+body[data-theme=dojo] .shell{width:min(100%,1660px);max-width:none;min-height:100vh;margin:0 auto;padding:18px 24px 30px;display:grid;grid-template-columns:150px repeat(3,minmax(0,1fr));grid-template-rows:auto auto auto auto auto auto;align-content:start;gap:12px;background:#f8f3e9d9!important;box-shadow:0 0 46px #49372c2b}
+body[data-theme=dojo] nav{grid-column:2/5;grid-row:1;min-height:42px;display:flex;align-items:center;gap:12px;padding:0 8px;color:#62564d}
+body[data-theme=dojo] nav .brand{margin-right:auto;color:#765442;font-size:14px}
+body[data-theme=dojo] nav #saveStatus{margin-left:auto}
+body[data-theme=dojo] #dojoSidebar{grid-column:1;grid-row:1/8;position:sticky;top:14px;z-index:3;min-height:660px;padding:14px 8px;border:1px solid #b6a18c80;border-radius:16px;background:linear-gradient(180deg,#f8f3e9eb,#eee6d9eb);box-shadow:0 5px 20px #49372c16;display:flex;flex-direction:column;justify-content:space-between}
+body[data-theme=dojo] .dojo-nav-links{display:grid;gap:6px}
+body[data-theme=dojo] .dojo-sidebar a,body[data-theme=dojo] .dojo-nav-settings{display:flex;align-items:center;gap:10px;min-height:42px;padding:8px 9px;border:0;border-radius:9px;background:transparent;color:#383532;text-decoration:none;font:14px Georgia,serif;letter-spacing:0}
+body[data-theme=dojo] .dojo-sidebar a:hover,body[data-theme=dojo] .dojo-sidebar a.active{background:#efd8ca;color:#963f2b}
+body[data-theme=dojo] .dojo-sidebar svg{width:21px;height:21px;flex:none;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+body[data-theme=dojo] .dojo-calligraphy{margin:auto 0 0;padding:22px 5px 0;color:#51483f;writing-mode:vertical-rl;font:20px/1.7 Georgia,serif;letter-spacing:.24em}
+body[data-theme=dojo] main,body[data-theme=dojo] main>.column{display:contents}
+body[data-theme=dojo] header{grid-column:2/4;grid-row:2;min-height:168px;margin:0;padding:6px 12px 10px;border:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+body[data-theme=dojo] header .eyebrow{font-size:0;line-height:1;height:34px}
+body[data-theme=dojo] header .eyebrow:before{content:'';display:block;width:44px;height:42px;margin:auto;background:radial-gradient(circle at 50% 48%,#b64e35 0 11px,transparent 12px),linear-gradient(#b64e35,#b64e35) center 32px/3px 9px no-repeat}
+body[data-theme=dojo] h1{font:500 clamp(40px,4.2vw,67px)/1.03 Georgia,serif;letter-spacing:-2px;margin:0 0 3px;color:#17191a}
+body[data-theme=dojo] .planner-heading-button{color:inherit}
+body[data-theme=dojo] .intro{display:flex;flex-direction:column;gap:5px;align-items:center}
+body[data-theme=dojo] .planner-subtitle-button{color:#574b43;font:14px/1.4 Georgia,serif;letter-spacing:.2em}
+body[data-theme=dojo] .heading-pencil{display:none}
+body[data-theme=dojo] .date-controls{gap:4px}
+body[data-theme=dojo] .date-controls button{padding:4px 9px;border-radius:7px;background:#f7f0e7d9}
+body[data-theme=dojo] .calendar-line{display:flex;justify-content:center;gap:18px;margin:7px 0 0;font:16px Georgia,serif}
+body[data-theme=dojo] .calendar-line>span+span{border-color:#b64e35}
+body[data-theme=dojo] .daily-trust{grid-column:4;grid-row:2;align-self:stretch;min-height:150px;margin:0;padding:13px;border:1px solid #bca68d;border-radius:14px;text-align:center;text-decoration:none;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#f9f4e9ed,#e9dfd0e8)!important;box-shadow:0 5px 16px #49372c14}
+body[data-theme=dojo] .daily-trust .section-head{order:0;justify-content:center;margin:0 0 6px;padding:0;border:0;background:none!important}
+body[data-theme=dojo] .daily-trust h2{font:16px Georgia,serif;letter-spacing:0}
+body[data-theme=dojo] .daily-trust .trust-kicker{font-size:8px;letter-spacing:.15em;color:#8b573f;margin:0 0 5px}
+body[data-theme=dojo] .daily-trust .trust-words{font:italic 16px/1.4 Georgia,serif;color:#4a4139;margin:0}
+body[data-theme=dojo] .daily-trust .trust-source{font-size:9px;margin:6px 0 0;color:#806d5b}
+body[data-theme=dojo] section,body[data-theme=dojo] .custom-planner-section{min-width:0;margin:0;padding:0 12px 13px;overflow:hidden;border:1px solid #d7c8b5;border-radius:15px!important;background:#fbf8f0ef!important;box-shadow:0 5px 16px #46372a14,inset 0 1px #fff9}
+body[data-theme=dojo] .section-head{position:relative;min-height:51px;margin:0 -12px 9px;padding:8px 12px;border:0!important;border-radius:14px 14px 0 0;background:linear-gradient(90deg,#f1e5d7,#f8f2e8)!important;display:flex;justify-content:center}
+body[data-theme=dojo] .section-head:before{display:none}
+body[data-theme=dojo] h2{display:flex;align-items:center;justify-content:center;gap:9px;color:#17191a;font:600 18px/1.2 Georgia,serif;letter-spacing:0!important;text-transform:none}
+body[data-theme=dojo] .section-title-rename{color:inherit}
+body[data-theme=dojo] .dojo-section-icon{width:25px;height:25px;flex:none;fill:none;stroke:#a74932;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+body[data-theme=dojo] .section-title-action,body[data-theme=dojo] .remove-section-button{color:#9d4b36}
+body[data-theme=dojo] .morning-section{grid-column:2;grid-row:3}
+body[data-theme=dojo] .care{grid-column:3;grid-row:3;margin:0;padding-bottom:13px;background:#fbf8f0ef!important}
+body[data-theme=dojo] .todo-section{grid-column:4;grid-row:3}
+body[data-theme=dojo] .menu{grid-column:2;grid-row:4;margin:0;background:#fbf8f0ef!important}
+body[data-theme=dojo] #weekGlance{grid-column:3;grid-row:4}
+body[data-theme=dojo] #dailyReview{grid-column:4;grid-row:4}
+body[data-theme=dojo] .home{grid-column:2;grid-row:5}
+body[data-theme=dojo] .notes-section{grid-column:3;grid-row:5}
+body[data-theme=dojo] .weekly-section{grid-column:4;grid-row:5;background:#fbf8f0ef!important}
+body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:2/5;grid-row:6}
+body[data-theme=dojo] .check-row{min-height:37px;padding:3px 4px;border-bottom:1px solid #d7c8b54f;background:transparent}
+body[data-theme=dojo] .check-row input[type=checkbox]{accent-color:#b64e35}
+body[data-theme=dojo] .care #care{gap:0}
+body[data-theme=dojo] .care .check-row{min-height:35px;border:0;border-bottom:1px solid #d7c8b54f;border-radius:0;background:transparent;box-shadow:none}
+body[data-theme=dojo] .care .small-note{display:none}
+body[data-theme=dojo] .todo-section .check-row{background:transparent;border-bottom:1px solid #d7c8b54f}
+body[data-theme=dojo] .menu .writing,body[data-theme=dojo] .notes-section .writing{border:0;background:repeating-linear-gradient(transparent 0,transparent 37px,#d7c8b56e 38px);box-shadow:none}
+body[data-theme=dojo] .writing canvas{background:transparent}
+body[data-theme=dojo] input,body[data-theme=dojo] textarea,body[data-theme=dojo] .menu-plan-row input{background:#fffdf8;color:#383532;border-color:#dfd2c2;border-radius:8px}
+body[data-theme=dojo] #glanceGrid{display:grid;gap:0}
+body[data-theme=dojo] .glance-day{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;padding:5px 3px;border-bottom:1px solid #d7c8b54f}
+body[data-theme=dojo] .glance-day>span{color:#a74932;font-size:11px}
+body[data-theme=dojo] .glance-day textarea{min-height:31px;height:31px;padding:4px 6px;border:0;background:transparent;font:11px Georgia,serif;resize:vertical}
+body[data-theme=dojo] .weekly-section table{font-size:10px}
+body[data-theme=dojo] footer{grid-column:2/5;grid-row:7;margin-top:2px;padding:8px 12px;text-align:center;color:#62584d}
+body[data-theme=dojo] footer>span{padding:8px;border:0;background:none;font:italic 19px Georgia,serif;color:#59483d}
+@media(max-width:1050px){
+ body[data-theme=dojo] .shell{grid-template-columns:128px repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+ body[data-theme=dojo] nav{grid-column:2/4}
+ body[data-theme=dojo] header{grid-column:2/4;grid-row:2}
+ body[data-theme=dojo] .daily-trust{grid-column:2/4;grid-row:3;min-height:100px}
+ body[data-theme=dojo] .morning-section{grid-column:2;grid-row:4}
+ body[data-theme=dojo] .care{grid-column:3;grid-row:4}
+ body[data-theme=dojo] .todo-section{grid-column:2;grid-row:5}
+ body[data-theme=dojo] .menu{grid-column:3;grid-row:5}
+ body[data-theme=dojo] #weekGlance{grid-column:2;grid-row:6}
+ body[data-theme=dojo] #dailyReview{grid-column:3;grid-row:6}
+ body[data-theme=dojo] .home{grid-column:2;grid-row:7}
+ body[data-theme=dojo] .notes-section{grid-column:3;grid-row:7}
+ body[data-theme=dojo] .weekly-section{grid-column:2;grid-row:8}
+ body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:3;grid-row:8}
+ body[data-theme=dojo] footer{grid-column:2/4;grid-row:9}
+}
+@media(max-width:680px){
+ body[data-theme=dojo]{background-attachment:scroll!important}
+ body[data-theme=dojo] .shell{display:flex;flex-direction:column;gap:9px;padding:8px;background:#f8f3e9d9!important}
+ body[data-theme=dojo] nav{order:0;flex-wrap:wrap;padding:4px}
+ body[data-theme=dojo] #dojoSidebar{position:relative;top:auto;min-height:0;order:1;padding:5px;border-radius:12px}
+ body[data-theme=dojo] .dojo-nav-links{display:flex;overflow:auto;gap:4px}
+ body[data-theme=dojo] .dojo-sidebar a{min-height:37px;padding:6px 8px;white-space:nowrap;font-size:12px}
+ body[data-theme=dojo] .dojo-nav-settings,body[data-theme=dojo] .dojo-calligraphy{display:none}
+ body[data-theme=dojo] header{order:2;min-height:205px;padding:10px 4px}
+ body[data-theme=dojo] .daily-trust{order:3}
+ body[data-theme=dojo] main{display:contents}
+ body[data-theme=dojo] .morning-section{order:4}
+ body[data-theme=dojo] .care{order:5}
+ body[data-theme=dojo] .todo-section{order:6}
+ body[data-theme=dojo] .menu{order:7}
+ body[data-theme=dojo] #weekGlance{order:8}
+ body[data-theme=dojo] #dailyReview{order:9}
+ body[data-theme=dojo] .home{order:10}
+ body[data-theme=dojo] .notes-section{order:11}
+ body[data-theme=dojo] .weekly-section{order:12}
+ body[data-theme=dojo] .weekly-review:not(#dailyReview){order:13}
+ body[data-theme=dojo] footer{order:14}
+ body[data-theme=dojo] .care .check-row{min-height:43px}
+}
+
+/* Dojo Calm: room-framed Japanese paper dashboard inspired by the supplied mockup. */
+body[data-theme=dojo]{min-height:100vh;background:#d8c9b8 url('dojo-room.jpg') center top/cover fixed!important;color:#282b2d}
+body[data-theme=dojo] .shell{width:min(100%,1660px);max-width:none;min-height:100vh;margin:0 auto;padding:18px 24px 30px;display:grid;grid-template-columns:150px repeat(3,minmax(0,1fr));grid-template-rows:auto auto auto auto auto auto;align-content:start;gap:12px;background:#f8f3e9d9!important;box-shadow:0 0 46px #49372c2b}
+body[data-theme=dojo] nav{grid-column:2/5;grid-row:1;min-height:42px;display:flex;align-items:center;gap:12px;padding:0 8px;color:#62564d}
+body[data-theme=dojo] nav .brand{margin-right:auto;color:#765442;font-size:14px}body[data-theme=dojo] nav #saveStatus{margin-left:auto}
+body[data-theme=dojo] #dojoSidebar{grid-column:1;grid-row:1/8;position:sticky;top:14px;z-index:3;min-height:660px;padding:14px 8px;border:1px solid #b6a18c80;border-radius:16px;background:linear-gradient(180deg,#f8f3e9eb,#eee6d9eb);box-shadow:0 5px 20px #49372c16;display:flex;flex-direction:column;justify-content:space-between}
+body[data-theme=dojo] .dojo-nav-links{display:grid;gap:6px}
+body[data-theme=dojo] .dojo-sidebar a,body[data-theme=dojo] .dojo-nav-settings{display:flex;align-items:center;gap:10px;min-height:42px;padding:8px 9px;border:0;border-radius:9px;background:transparent;color:#383532;text-decoration:none;font:14px Georgia,serif;letter-spacing:0}
+body[data-theme=dojo] .dojo-sidebar a:hover,body[data-theme=dojo] .dojo-sidebar a.active{background:#efd8ca;color:#963f2b}
+body[data-theme=dojo] .dojo-sidebar svg{width:21px;height:21px;flex:none;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+body[data-theme=dojo] .dojo-calligraphy{margin:auto 0 0;padding:22px 5px 0;color:#51483f;writing-mode:vertical-rl;font:20px/1.7 Georgia,serif;letter-spacing:.24em}
+body[data-theme=dojo] main,body[data-theme=dojo] main>.column{display:contents}
+body[data-theme=dojo] header{grid-column:2/4;grid-row:2;min-height:168px;margin:0;padding:6px 12px 10px;border:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+body[data-theme=dojo] header .eyebrow{font-size:0;line-height:1;height:34px}body[data-theme=dojo] header .eyebrow:before{content:'';display:block;width:44px;height:42px;margin:auto;background:radial-gradient(circle at 50% 48%,#b64e35 0 11px,transparent 12px),linear-gradient(#b64e35,#b64e35) center 32px/3px 9px no-repeat}
+body[data-theme=dojo] h1{font:500 clamp(40px,4.2vw,67px)/1.03 Georgia,serif;letter-spacing:-2px;margin:0 0 3px;color:#17191a}body[data-theme=dojo] .planner-heading-button{color:inherit}
+body[data-theme=dojo] .intro{display:flex;flex-direction:column;gap:5px;align-items:center}body[data-theme=dojo] .planner-subtitle-button{color:#574b43;font:14px/1.4 Georgia,serif;letter-spacing:.2em}body[data-theme=dojo] .heading-pencil{display:none}
+body[data-theme=dojo] .date-controls{gap:4px}body[data-theme=dojo] .date-controls button{padding:4px 9px;border-radius:7px;background:#f7f0e7d9}body[data-theme=dojo] .calendar-line{display:flex;justify-content:center;gap:18px;margin:7px 0 0;font:16px Georgia,serif}body[data-theme=dojo] .calendar-line>span+span{border-color:#b64e35}
+body[data-theme=dojo] .daily-trust{grid-column:4;grid-row:2;align-self:stretch;min-height:150px;margin:0;padding:13px;border:1px solid #bca68d;border-radius:14px;text-align:center;text-decoration:none;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#f9f4e9ed,#e9dfd0e8)!important;box-shadow:0 5px 16px #49372c14}
+body[data-theme=dojo] .daily-trust .section-head{order:0;justify-content:center;margin:0 0 6px;padding:0;border:0;background:none!important}body[data-theme=dojo] .daily-trust h2{font:16px Georgia,serif;letter-spacing:0}body[data-theme=dojo] .daily-trust .trust-kicker{font-size:8px;letter-spacing:.15em;color:#8b573f;margin:0 0 5px}body[data-theme=dojo] .daily-trust .trust-words{font:italic 16px/1.4 Georgia,serif;color:#4a4139;margin:0}body[data-theme=dojo] .daily-trust .trust-source{font-size:9px;margin:6px 0 0;color:#806d5b}
+body[data-theme=dojo] section,body[data-theme=dojo] .custom-planner-section{min-width:0;margin:0;padding:0 12px 13px;overflow:hidden;border:1px solid #d7c8b5;border-radius:15px!important;background:#fbf8f0ef!important;box-shadow:0 5px 16px #46372a14,inset 0 1px #fff9}
+body[data-theme=dojo] .section-head{position:relative;min-height:51px;margin:0 -12px 9px;padding:8px 12px;border:0!important;border-radius:14px 14px 0 0;background:linear-gradient(90deg,#f1e5d7,#f8f2e8)!important;display:flex;justify-content:center}body[data-theme=dojo] .section-head:before{display:none}
+body[data-theme=dojo] h2{display:flex;align-items:center;justify-content:center;gap:9px;color:#17191a;font:600 18px/1.2 Georgia,serif;letter-spacing:0!important;text-transform:none}body[data-theme=dojo] .section-title-rename{color:inherit}
+body[data-theme=dojo] .dojo-section-icon{width:25px;height:25px;flex:none;fill:none;stroke:#a74932;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}body[data-theme=dojo] .section-title-action,body[data-theme=dojo] .remove-section-button{color:#9d4b36}
+body[data-theme=dojo] .morning-section{grid-column:2;grid-row:3}body[data-theme=dojo] .care{grid-column:3;grid-row:3;margin:0;padding-bottom:13px;background:#fbf8f0ef!important}body[data-theme=dojo] .todo-section{grid-column:4;grid-row:3}body[data-theme=dojo] .menu{grid-column:2;grid-row:4;margin:0;background:#fbf8f0ef!important}body[data-theme=dojo] #weekGlance{grid-column:3;grid-row:4}body[data-theme=dojo] #dailyReview{grid-column:4;grid-row:4}body[data-theme=dojo] .home{grid-column:2;grid-row:5}body[data-theme=dojo] .notes-section{grid-column:3;grid-row:5}body[data-theme=dojo] .weekly-section{grid-column:4;grid-row:5;background:#fbf8f0ef!important}body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:2/5;grid-row:6}
+body[data-theme=dojo] .check-row{min-height:37px;padding:3px 4px;border-bottom:1px solid #d7c8b54f;background:transparent}body[data-theme=dojo] .check-row input[type=checkbox]{accent-color:#b64e35}body[data-theme=dojo] .care #care{gap:0}body[data-theme=dojo] .care .check-row{min-height:35px;border:0;border-bottom:1px solid #d7c8b54f;border-radius:0;background:transparent;box-shadow:none}body[data-theme=dojo] .care .small-note{display:none}body[data-theme=dojo] .todo-section .check-row{background:transparent;border-bottom:1px solid #d7c8b54f}
+body[data-theme=dojo] .menu .writing,body[data-theme=dojo] .notes-section .writing{border:0;background:repeating-linear-gradient(transparent 0,transparent 37px,#d7c8b56e 38px);box-shadow:none}body[data-theme=dojo] .writing canvas{background:transparent}
+body[data-theme=dojo] input,body[data-theme=dojo] textarea,body[data-theme=dojo] .menu-plan-row input{background:#fffdf8;color:#383532;border-color:#dfd2c2;border-radius:8px}
+body[data-theme=dojo] #glanceGrid{display:grid;gap:0}body[data-theme=dojo] .glance-day{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:6px;padding:5px 3px;border-bottom:1px solid #d7c8b54f}body[data-theme=dojo] .glance-day>span{color:#a74932;font-size:11px}body[data-theme=dojo] .glance-day textarea{min-height:31px;height:31px;padding:4px 6px;border:0;background:transparent;font:11px Georgia,serif;resize:vertical}
+body[data-theme=dojo] .weekly-section table{font-size:10px}body[data-theme=dojo] footer{grid-column:2/5;grid-row:7;margin-top:2px;padding:8px 12px;text-align:center;color:#62584d}body[data-theme=dojo] footer>span{padding:8px;border:0;background:none;font:italic 19px Georgia,serif;color:#59483d}
+@media(max-width:1050px){body[data-theme=dojo] .shell{grid-template-columns:128px repeat(2,minmax(0,1fr));gap:10px;padding:12px}body[data-theme=dojo] nav{grid-column:2/4}body[data-theme=dojo] header{grid-column:2/4;grid-row:2}body[data-theme=dojo] .daily-trust{grid-column:2/4;grid-row:3;min-height:100px}body[data-theme=dojo] .morning-section{grid-column:2;grid-row:4}body[data-theme=dojo] .care{grid-column:3;grid-row:4}body[data-theme=dojo] .todo-section{grid-column:2;grid-row:5}body[data-theme=dojo] .menu{grid-column:3;grid-row:5}body[data-theme=dojo] #weekGlance{grid-column:2;grid-row:6}body[data-theme=dojo] #dailyReview{grid-column:3;grid-row:6}body[data-theme=dojo] .home{grid-column:2;grid-row:7}body[data-theme=dojo] .notes-section{grid-column:3;grid-row:7}body[data-theme=dojo] .weekly-section{grid-column:2;grid-row:8}body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:3;grid-row:8}body[data-theme=dojo] footer{grid-column:2/4;grid-row:9}}
+@media(max-width:680px){body[data-theme=dojo]{background-attachment:scroll!important}body[data-theme=dojo] .shell{display:flex;flex-direction:column;gap:9px;padding:8px;background:#f8f3e9d9!important}body[data-theme=dojo] nav{order:0;flex-wrap:wrap;padding:4px}body[data-theme=dojo] #dojoSidebar{position:relative;top:auto;min-height:0;order:1;padding:5px;border-radius:12px}body[data-theme=dojo] .dojo-nav-links{display:flex;overflow:auto;gap:4px}body[data-theme=dojo] .dojo-sidebar a{min-height:37px;padding:6px 8px;white-space:nowrap;font-size:12px}body[data-theme=dojo] .dojo-nav-settings,body[data-theme=dojo] .dojo-calligraphy{display:none}body[data-theme=dojo] header{order:2;min-height:205px;padding:10px 4px}body[data-theme=dojo] .daily-trust{order:3}body[data-theme=dojo] main{display:contents}body[data-theme=dojo] .morning-section{order:4}body[data-theme=dojo] .care{order:5}body[data-theme=dojo] .todo-section{order:6}body[data-theme=dojo] .menu{order:7}body[data-theme=dojo] #weekGlance{order:8}body[data-theme=dojo] #dailyReview{order:9}body[data-theme=dojo] .home{order:10}body[data-theme=dojo] .notes-section{order:11}body[data-theme=dojo] .weekly-section{order:12}body[data-theme=dojo] .weekly-review:not(#dailyReview){order:13}body[data-theme=dojo] footer{order:14}body[data-theme=dojo] .care .check-row{min-height:43px}}
