@@ -1,4 +1,6 @@
 (() => {
+  document.querySelector('#plannerRefresh')?.addEventListener('click', () => window.location.reload());
+
   let startY = 0;
   let pulling = false;
   let distance = 0;
