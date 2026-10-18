@@ -384,6 +384,15 @@ body[data-theme=dojo] section,body[data-theme=dojo] .custom-planner-section{min-
 body[data-theme=dojo] .section-head{position:relative;min-height:51px;margin:0 -12px 9px;padding:8px 12px;border:0!important;border-radius:14px 14px 0 0;background:linear-gradient(90deg,#f1e5d7,#f8f2e8)!important;display:flex;justify-content:center}body[data-theme=dojo] .section-head:before{display:none}
 body[data-theme=dojo] h2{display:flex;align-items:center;justify-content:center;gap:9px;color:#17191a;font:600 18px/1.2 Georgia,serif;letter-spacing:0!important;text-transform:none}body[data-theme=dojo] .section-title-rename{color:inherit}
 body[data-theme=dojo] .dojo-section-icon{width:25px;height:25px;flex:none;fill:none;stroke:#a74932;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}body[data-theme=dojo] .section-title-action,body[data-theme=dojo] .remove-section-button{color:#9d4b36}
+
+/* Keep flower-theme section titles clear on portrait tablets. */
+@media (min-width:701px) and (max-width:900px){
+ body[data-theme=flower] section:not(.daily-trust){padding-top:60px}
+ body[data-theme=flower] .section-head{height:auto;min-height:48px;padding:7px 38px}
+ body[data-theme=flower] .section-head h2{min-width:0;max-width:100%;font-size:clamp(14px,2.1vw,17px);line-height:1.15;letter-spacing:1px;overflow-wrap:anywhere}
+ body[data-theme=flower] .section-head>.remove-section-button{position:absolute;right:5px;top:5px}
+ body[data-theme=flower] .section-head>.section-title-action{right:36px;top:5px}
+}
 body[data-theme=dojo] .morning-section{grid-column:2;grid-row:3}body[data-theme=dojo] .care{grid-column:3;grid-row:3;margin:0;padding-bottom:13px;background:#fbf8f0ef!important}body[data-theme=dojo] .todo-section{grid-column:4;grid-row:3}body[data-theme=dojo] .menu{grid-column:2;grid-row:4;margin:0;background:#fbf8f0ef!important}body[data-theme=dojo] #weekGlance{grid-column:3;grid-row:4}body[data-theme=dojo] #dailyReview{grid-column:4;grid-row:4}body[data-theme=dojo] .home{grid-column:2;grid-row:5}body[data-theme=dojo] .notes-section{grid-column:3;grid-row:5}body[data-theme=dojo] .weekly-section{grid-column:4;grid-row:5;background:#fbf8f0ef!important}body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:2/5;grid-row:6}
 body[data-theme=dojo] .check-row{min-height:37px;padding:3px 4px;border-bottom:1px solid #d7c8b54f;background:transparent}body[data-theme=dojo] .check-row input[type=checkbox]{accent-color:#b64e35}body[data-theme=dojo] .care #care{gap:0}body[data-theme=dojo] .care .check-row{min-height:35px;border:0;border-bottom:1px solid #d7c8b54f;border-radius:0;background:transparent;box-shadow:none}body[data-theme=dojo] .care .small-note{display:none}body[data-theme=dojo] .todo-section .check-row{background:transparent;border-bottom:1px solid #d7c8b54f}
 body[data-theme=dojo] .menu .writing,body[data-theme=dojo] .notes-section .writing{border:0;background:repeating-linear-gradient(transparent 0,transparent 37px,#d7c8b56e 38px);box-shadow:none}body[data-theme=dojo] .writing canvas{background:transparent}
