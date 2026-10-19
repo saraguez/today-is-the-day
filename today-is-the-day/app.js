@@ -193,7 +193,7 @@ for(const id of ['notes','menu']){
  const canvas=$('#'+id),paper=canvas.parentElement,tools=$(`[data-for="${id}"]`),switcher=document.createElement('div');
  switcher.className='writing-switch';switcher.setAttribute('role','group');switcher.setAttribute('aria-label',id==='notes'?'Notes input mode':'Tonight’s Menu input mode');
  const textarea=document.createElement('textarea');textarea.id=id+'Text';textarea.className='typed-writing';textarea.setAttribute('aria-label',id==='notes'?'Type notes':'Type tonight’s menu');textarea.placeholder=id==='notes'?'Write a note to yourself…':'What’s for dinner?';textarea.hidden=true;
- textarea.oninput=()=>{day(selected).text ||= {};day(selected).text[id]=textarea.value;if(id==='menu'){const dates=week(),first=dates[0];state.weeklyMenus ||= {};state.weeklyMenus[first] ||= {};state.weeklyMenus[first][selected]=textarea.value;day(selected).menuFromWeeklyPlan=true}save()};paper.append(textarea);
+ textarea.oninput=()=>{day(selected).text ||= {};day(selected).text[id]=textarea.value;if(id==='menu'){const dates=week(),first=dates[0],weekday=dates.indexOf(selected);if(weekday>=0&&weekday<5){state.weeklyMenus ||= {};state.weeklyMenus[first] ||= {};state.weeklyMenus[first][selected]=textarea.value;day(selected).menuFromWeeklyPlan=true}else delete day(selected).menuFromWeeklyPlan}save()};paper.append(textarea);
  for(const [label,mode] of [['✎','handwrite'],['Type','type']]){const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.mode=mode;if(mode==='handwrite'){button.setAttribute('aria-label','Handwrite');button.title='Handwrite'}button.onclick=()=>{writingModes[id]=mode;updateWritingModes()};switcher.append(button)}
  paper.before(switcher);
 }
