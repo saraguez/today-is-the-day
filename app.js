@@ -3,22 +3,19 @@ let state={days:{}}, storageOK=true;
 try{state=JSON.parse(localStorage.getItem(KEY))||state}catch(e){storageOK=false}if(!state.days||typeof state.days!=='object')state={days:{}};
 function migrateRoutine(){let changed=false;if(state.contentVersion!==2&&state.contentVersion!==3&&state.contentVersion!==4){for(const d of Object.values(state.days)){d.previousRoutine={morning:d.morning,care:d.care};d.morning=[];d.care=[]}state.contentVersion=2;changed=true}if(state.contentVersion===2){for(const d of Object.values(state.days)){d.morning=[false,false,false,false,...(Array.isArray(d.morning)?d.morning:[])];}state.contentVersion=3;changed=true}if(state.contentVersion===3){for(const d of Object.values(state.days)){if(Array.isArray(d.morning)){[d.morning[5],d.morning[6]]=[d.morning[6],d.morning[5]]}}state.contentVersion=4;changed=true}if(changed){try{localStorage.setItem(KEY,JSON.stringify(state));window.dispatchEvent(new Event('planner-saved'))}catch{}}}migrateRoutine();
 const $=s=>document.querySelector(s), iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, dateLabel=(date,locale,options)=>{const day=new Date(date+'T12:00:00'),currentLocale=locale||state.plannerSettings?.language||undefined,label=day.toLocaleDateString(currentLocale,options);return options?.weekday&&day.getDay()===6?label.replace(new Intl.DateTimeFormat(currentLocale,{weekday:options.weekday}).format(day),'Shabbat'):label};
-let selected=iso(new Date());const day=k=>state.days[k]||(state.days[k]={morning:[],care:[],todos:[],ink:{}});
+let selected=iso(new Date());const day=k=>state.days[k]||(state.days[k]={morning:[],care:[],todos:[],keepInMind:[],ink:{}});document.addEventListener('click',event=>{const el=event.target;if(!(el instanceof HTMLDialogElement)||!el.open)return;const r=el.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)el.close()});
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));window.dispatchEvent(new Event('planner-saved'));storageOK=true;$('#saveStatus').textContent='Saved on this device'}catch(e){storageOK=false;$('#saveStatus').textContent='Not saved — export a backup (storage unavailable or full)'}}
 function row(text,checked,change,remove){let label=document.createElement('label');label.className='check-row';let input=document.createElement('input');input.type='checkbox';input.checked=!!checked;input.onchange=()=>change(input.checked);let span=document.createElement('span');span.className='task-text';span.textContent=text;label.append(input,span);if(remove){let b=document.createElement('button');b.type='button';b.className='delete';b.textContent='×';b.setAttribute('aria-label','Delete '+text);b.onclick=e=>{e.preventDefault();remove()};label.append(b)}return label}
 function sortTodoItems(items){items.sort((a,b)=>Number(!!a.done)-Number(!!b.done))}
-function appendNewTodos(values){const entries=values.map(value=>String(value||'').trim()).filter(Boolean);if(!entries.length)return;const d=day(selected);d.todos ||= [];d.todos.push(...entries.map(text=>({id:crypto.randomUUID(),text,done:false})));sortTodoItems(d.todos);save()}
-function appendNewTodo(text){appendNewTodos([text])}
+function appendNewTodos(values,listKey='todos'){const entries=values.map(value=>String(value||'').trim()).filter(Boolean);if(!entries.length)return;const d=day(selected);d[listKey] ||= [];d[listKey].push(...entries.map(text=>({id:crypto.randomUUID(),text,done:false})));sortTodoItems(d[listKey]);save()}
+function appendNewTodo(text,listKey='todos'){appendNewTodos([text],listKey)}
 function parseTodoPaste(text){return text.split(/\r\n|\n|\r/).map(line=>line.trim().replace(/^(?:[-*•‣]\s+|\d+[.)]\s+)/,'').trim()).filter(Boolean)}
-function rollUnfinishedTodos(target){const dest=day(target),dates=Object.keys(state.days).filter(date=>date<=target).sort(),priorDates=dates.filter(date=>date<target);let changed=false;for(const date of dates){for(const item of state.days[date]?.todos||[]){if(item&&typeof item.text==='string'&&item.text.trim()&&!item.id){item.id=crypto.randomUUID();changed=true}}}const resolvedBeforeTarget=new Set();for(const date of priorDates){for(const item of state.days[date]?.todos||[]){if(item?.id&&(item.done||item.resolved||item.deleted))resolvedBeforeTarget.add(item.id)}}const previousCopies=new Map();for(const date of priorDates){for(const item of state.days[date]?.todos||[]){if(item?.id&&item.text?.trim()&&!item.deleted)previousCopies.set(item.id,item)}}dest.todos ||= [];const retained=dest.todos.filter(item=>!item?.id||!resolvedBeforeTarget.has(item.id));if(retained.length!==dest.todos.length){dest.todos=retained;changed=true}const present=new Set(dest.todos.map(item=>item?.id).filter(Boolean));for(const [id,item] of previousCopies){if(!resolvedBeforeTarget.has(id)&&!present.has(id)){const copy={...item,done:false};delete copy.resolved;delete copy.deleted;delete copy.carriedTo;dest.todos.push(copy);present.add(id);changed=true}}if(changed)save()}
+function rollUnfinishedTodos(target){const dest=day(target);dest.keepInMind ||= [];dest.todos ||= [];const dates=Object.keys(state.days).filter(date=>date<=target).sort(),priorDates=dates.filter(date=>date<target);let changed=false;const allLists=d=>[...(Array.isArray(d?.todos)?d.todos:[]),...(Array.isArray(d?.keepInMind)?d.keepInMind:[])];for(const date of dates){for(const item of allLists(state.days[date]))if(item&&typeof item.text==='string'&&item.text.trim()&&!item.id){item.id=crypto.randomUUID();changed=true}}const resolvedBeforeTarget=new Set(),previousCopies=new Map(),priorIds=new Set();for(const date of priorDates)for(const item of allLists(state.days[date])){if(!item?.id)continue;priorIds.add(item.id);if(item.done||item.resolved||item.deleted)resolvedBeforeTarget.add(item.id);if(item.text?.trim()&&!item.deleted)previousCopies.set(item.id,item)}const todayItems=dest.todos.filter(item=>!item?.id||!priorIds.has(item.id));if(todayItems.length!==dest.todos.length){dest.todos=todayItems;changed=true}const retained=dest.keepInMind.filter(item=>!item?.id||!resolvedBeforeTarget.has(item.id));if(retained.length!==dest.keepInMind.length){dest.keepInMind=retained;changed=true}const present=new Set(dest.keepInMind.map(item=>item?.id).filter(Boolean));for(const [id,item]of previousCopies){if(resolvedBeforeTarget.has(id)||present.has(id))continue;const copy={...item,done:false};delete copy.resolved;delete copy.deleted;delete copy.carriedTo;dest.keepInMind.push(copy);present.add(id);changed=true}sortTodoItems(dest.todos);sortTodoItems(dest.keepInMind);if(changed)save()}
 function lists(){
  let d=day(selected);d.home ||= [];
  $('#home').replaceChildren();['Launch Laundry','Defrost Dinner',"Tonight’s Dinner Menu"].forEach((t,i)=>$('#home').append(row(t,d.home[i],v=>{d.home[i]=v;save()})));
  for(const [id,items] of [['morning',morning],['care',habits]]){let box=$('#'+id);box.replaceChildren();items.forEach((text,i)=>box.append(row(text,d[id][i],v=>{d[id][i]=v;save();tracker()})))}
- const todoBox=$('#todos');todoBox.replaceChildren();
- d.todos=(Array.isArray(d.todos)?d.todos:[]).filter(item=>item&&typeof item.text==='string'&&item.text.trim());let todoOrderChanged=false;d.todos.forEach(item=>{if(!item.id){item.id=crypto.randomUUID();todoOrderChanged=true}});const todoOrder=d.todos.map(item=>item.id);sortTodoItems(d.todos);if(todoOrderChanged||d.todos.some((item,index)=>item.id!==todoOrder[index]))save();
- d.todos.forEach((item,i)=>{item.id ||= crypto.randomUUID();const label=document.createElement('label');label.className='check-row todo-edit-row';const check=document.createElement('input');check.type='checkbox';check.checked=!!item.done;check.setAttribute('aria-label','Complete to-do '+(i+1));check.onchange=()=>{for(const savedDay of Object.values(state.days)){for(const copy of savedDay.todos||[]){if(copy?.id===item.id)copy.resolved=check.checked}}item.done=check.checked;sortTodoItems(d.todos);save();lists()};const field=document.createElement('input');field.type='text';field.className='todo-line';field.maxLength=160;field.value=item.text;field.setAttribute('aria-label','To-do '+(i+1));field.oninput=()=>{item.text=field.value;save()};label.append(check,field);for(const [delta,caption] of [[-1,'Move up'],[1,'Move down']]){const move=document.createElement('button');move.type='button';move.className='todo-move';move.textContent=delta<0?'↑':'↓';move.setAttribute('aria-label',caption+' '+item.text);move.title=caption;move.disabled=i+delta<0||i+delta>=d.todos.length;move.onclick=e=>{e.preventDefault();const other=i+delta;[d.todos[i],d.todos[other]]=[d.todos[other],d.todos[i]];sortTodoItems(d.todos);save();lists()};label.append(move)}const remove=document.createElement('button');remove.type='button';remove.className='todo-delete';remove.textContent='×';remove.setAttribute('aria-label','Delete '+item.text+' completely');remove.title='Delete completely';remove.onclick=e=>{e.preventDefault();for(const savedDay of Object.values(state.days)){for(const copy of savedDay.todos||[]){if(copy?.id===item.id)copy.deleted=true}}d.todos.splice(i,1);save();lists()};label.append(remove);todoBox.append(label)});
- const blank=document.createElement('label');blank.className='check-row todo-edit-row todo-new-row';const blankCheck=document.createElement('input');blankCheck.type='checkbox';blankCheck.disabled=true;blankCheck.setAttribute('aria-hidden','true');const newField=document.createElement('input');newField.type='text';newField.className='todo-line';newField.maxLength=160;newField.placeholder='Add a to-do…';newField.setAttribute('aria-label','Add a to-do');newField.onpaste=e=>{const pasted=e.clipboardData?.getData('text')||'';if(!/[\r\n]/.test(pasted))return;e.preventDefault();const items=parseTodoPaste(pasted);if(newField.value.trim())items.unshift(newField.value.trim());appendNewTodos(items);newField.value='';lists();todoBox.querySelector('.todo-new-row .todo-line')?.focus()};newField.onkeydown=e=>{if(e.key==='Enter'&&newField.value.trim()){e.preventDefault();appendNewTodo(newField.value);newField.value='';lists();todoBox.querySelector('.todo-new-row .todo-line')?.focus()}};newField.onblur=()=>{if(newField.value.trim()){appendNewTodo(newField.value);lists()}};blank.append(blankCheck,newField);todoBox.append(blank);
+ const renderTodoList=(box,listKey,placeholder)=>{if(!box)return;box.replaceChildren();d[listKey]=(Array.isArray(d[listKey])?d[listKey]:[]).filter(item=>item&&typeof item.text==='string'&&item.text.trim());let orderChanged=false;d[listKey].forEach(item=>{if(!item.id){item.id=crypto.randomUUID();orderChanged=true}});const priorOrder=d[listKey].map(item=>item.id);sortTodoItems(d[listKey]);if(orderChanged||d[listKey].some((item,index)=>item.id!==priorOrder[index]))save();d[listKey].forEach((item,i)=>{const label=document.createElement('label');label.className='check-row todo-edit-row';const check=document.createElement('input');check.type='checkbox';check.checked=!!item.done;check.setAttribute('aria-label','Complete to-do '+(i+1));check.onchange=()=>{for(const savedDay of Object.values(state.days))for(const copy of [...(savedDay.todos||[]),...(savedDay.keepInMind||[])])if(copy?.id===item.id)copy.resolved=check.checked;item.done=check.checked;sortTodoItems(d[listKey]);save();lists()};const field=document.createElement('input');field.type='text';field.className='todo-line';field.maxLength=160;field.value=item.text;field.setAttribute('aria-label','To-do '+(i+1));field.oninput=()=>{item.text=field.value;for(const savedDay of Object.values(state.days))for(const copy of [...(savedDay.todos||[]),...(savedDay.keepInMind||[])])if(copy?.id===item.id)copy.text=field.value;save()};label.append(check,field);for(const[delta,caption]of[[-1,'Move up'],[1,'Move down']]){const move=document.createElement('button');move.type='button';move.className='todo-move';move.textContent=delta<0?'↑':'↓';move.setAttribute('aria-label',caption+' '+item.text);move.title=caption;move.disabled=i+delta<0||i+delta>=d[listKey].length;move.onclick=e=>{e.preventDefault();const other=i+delta;[d[listKey][i],d[listKey][other]]=[d[listKey][other],d[listKey][i]];sortTodoItems(d[listKey]);save();lists()};label.append(move)}const remove=document.createElement('button');remove.type='button';remove.className='todo-delete';remove.textContent='×';remove.setAttribute('aria-label','Delete '+item.text+' completely');remove.title='Delete completely';remove.onclick=e=>{e.preventDefault();for(const savedDay of Object.values(state.days))for(const copy of [...(savedDay.todos||[]),...(savedDay.keepInMind||[])])if(copy?.id===item.id)copy.deleted=true;d[listKey].splice(i,1);save();lists()};label.append(remove);box.append(label)});const blank=document.createElement('label');blank.className='check-row todo-edit-row todo-new-row';const blankCheck=document.createElement('input');blankCheck.type='checkbox';blankCheck.disabled=true;blankCheck.setAttribute('aria-hidden','true');const newField=document.createElement('input');newField.type='text';newField.className='todo-line';newField.maxLength=160;newField.placeholder=placeholder;newField.setAttribute('aria-label',placeholder);newField.onpaste=e=>{const pasted=e.clipboardData?.getData('text')||'';if(!/[\r\n]/.test(pasted))return;e.preventDefault();const items=parseTodoPaste(pasted);if(newField.value.trim())items.unshift(newField.value.trim());appendNewTodos(items,listKey);newField.value='';lists();document.querySelector('#'+box.id+' .todo-new-row .todo-line')?.focus()};newField.onkeydown=e=>{if(e.key==='Enter'&&newField.value.trim()){e.preventDefault();appendNewTodo(newField.value,listKey);newField.value='';lists();document.querySelector('#'+box.id+' .todo-new-row .todo-line')?.focus()}};newField.onblur=()=>{if(newField.value.trim()){appendNewTodo(newField.value,listKey);lists()}};blank.append(blankCheck,newField);box.append(blank)};renderTodoList($('#todos'),'todos','Add a to-do…');renderTodoList($('#keepInMindTodos'),'keepInMind','Add something to keep in mind…');
  const recurringBox=$('#recurringTodos');recurringBox.replaceChildren();for(const task of state.recurring||[]){if(selected<task.start||(task.end&&selected>task.end))continue;const weekday=new Date(selected+'T12:00:00').getDay();if(task.frequency==='weekdays'&&(weekday===0||weekday===6))continue;if(task.frequency==='weekly'&&weekday!==new Date(task.start+'T12:00:00').getDay())continue;const item=row(task.text+' · '+(task.frequency==='daily'?'daily':task.frequency==='weekly'?'weekly':'weekdays'),d.recurringDone?.[task.id],v=>{d.recurringDone ||= {};d.recurringDone[task.id]=v;save()},()=>{if(confirm('Stop repeating this to-do from this date onward? Earlier completions are preserved.')){const end=new Date(selected+'T12:00:00');end.setDate(end.getDate()-1);task.end=iso(end);save();lists()}});item.querySelector('.delete').setAttribute('aria-label','Stop repeating '+task.text);recurringBox.append(item)}
 }
 function week(){let start=new Date(selected+'T12:00:00');start.setDate(start.getDate()-start.getDay());return Array.from({length:7},(_,i)=>{let d=new Date(start);d.setDate(d.getDate()+i);return iso(d)})}
@@ -39,156 +36,11 @@ canvas.onpointerdown=e=>{if(e.button!==0||p.drawing)return;e.preventDefault();ca
 new ResizeObserver(()=>loadPad(id)).observe(canvas)}
 function loadPad(id){let p=pads[id];if(p.canvas.hidden)return;if(p.drawing)return;if(p.dayKey!==selected){p.undoStack=[];p.dayKey=selected}let {canvas,ctx}=p,r=canvas.getBoundingClientRect(),ratio=devicePixelRatio||1,version=++p.version;canvas.width=Math.round(r.width*ratio);canvas.height=Math.round(r.height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);let src=day(selected).ink[id];if(src){let img=new Image();img.onload=()=>{if(version===p.version)ctx.drawImage(img,0,0,r.width,r.height)};img.src=src}}
 const trustReflections=[
-  {
-    "text": "Let your reliance on Hashem be wholehearted; trust includes confidence in His ability to help you.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "Trust can make room for inner quiet, leaving more of your attention available for serving Hashem.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "Remember that Hashem’s ability to provide is greater than the particular route you can currently imagine.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "Let your relationships support your service of Hashem, rather than pull your attention away from it.",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "Remember Hashem’s care in peaceful moments too; help is not always visible as a rescue from difficulty.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  },
-  {
-    "text": "Bitachon asks for more than acknowledging Hashem’s power: it asks you to lean on Him with confidence.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "When worry crowds your day, return gently to reliance on Hashem and the responsibilities before you.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "Let trust soften your worries about provision so that your heart has more room for Divine service.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "Seeking approval need not determine your choices; keep your spiritual commitments at the center.",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "A day without a crisis can also invite gratitude for Divine protection you may never have noticed.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  },
-  {
-    "text": "Bring your hopes to Hashem with the conviction that His help is possible, rather than merely wishing.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "Think of bitachon as opening yourself to blessing, rather than facing everything through the lens of fear.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "Bitachon can help you settle into your home with appreciation, rather than constantly searching elsewhere for security.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "You can care about people without allowing the desire for their favor to direct your life.",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "Hashem’s kindness includes protection before trouble arrives, as well as support when trouble is already here.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  },
-  {
-    "text": "Practice making Hashem your deepest source of support when you think about the outcome you hope for.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "Let reliance on Hashem guide you toward tranquility and give your spiritual life space to breathe.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "Treat your resources as an opportunity for thoughtful, responsible choices, and use what you have for good.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "When social pressure competes with your values, return to the purpose you want your relationships to serve.",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "Look beyond dramatic moments of rescue when you reflect on how Hashem cares for you.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  },
-  {
-    "text": "The commentary describes trust as a relationship: wholehearted reliance invites a caring Divine response.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "Place your deepest trust in the Source of blessing, rather than only in the channels it travels through.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "When one familiar avenue seems closed, remember that Hashem’s care is not restricted to that avenue.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "Make space for connections that help you live faithfully, rather than keeping you preoccupied with pleasing others.",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "Quiet, ordinary days can be occasions to appreciate care that works without announcing itself.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  },
-  {
-    "text": "Let confidence in Hashem’s help become a daily practice, something you cultivate within your heart.",
-    "source": "Chapter 1",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478268/jewish/Chapter-One-The-Definition-of-Trust.htm"
-  },
-  {
-    "text": "You can nurture trust while waiting for good news, instead of spending the waiting time rehearsing worries.",
-    "source": "Introduction · Tranquility",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"
-  },
-  {
-    "text": "Cultivate a quieter heart by remembering that your needs do not depend solely on your own ingenuity.",
-    "source": "Introduction · Peace of Mind",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"
-  },
-  {
-    "text": "Look at your relationships through the lens of Divine service: what helps you stay true to your responsibilities?",
-    "source": "Introduction · Independence",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"
-  },
-  {
-    "text": "When giving thanks, leave room for the hardships you were spared, including those you never knew about.",
-    "source": "Chapter 2 · Trustworthiness",
-    "url": "https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"
-  }
+{text:"G‑d doesn’t just help you in hard times. G‑d prevents hardship from coming your way.",source:"Chapter 2 · Bottom line",url:"https://www.chabad.org/library/article_cdo/aid/5478271/jewish/Chapter-Two-Part-1-The-Seven-Qualities-of-Trustworthiness.htm"},
+{text:"Place your trust in G‑d and this peace of mind will allow you to dedicate yourself to Divine service.",source:"Introduction · Tranquility · Bottom line",url:"https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"},
+{text:"Your trust in G‑d will minimize your anxiety and put you in a peaceful state of mind.",source:"Introduction · Peace of Mind · Bottom line",url:"https://www.chabad.org/library/article_cdo/aid/5478237/jewish/Introduction-Part-5-Peace-of-Mind-and-Serenity.htm"},
+{text:"Your relationships should not be distracting you from serving G‑d.",source:"Introduction · Independence · Bottom line",url:"https://www.chabad.org/library/article_cdo/aid/5478234/jewish/Introduction-Part-4-Independence.htm"},
+{text:"Why choose anxiety if you can choose tranquility? Choose Bitachon!",source:"Introduction · Tranquility · Bottom line",url:"https://www.chabad.org/library/article_cdo/aid/5478227/jewish/Introduction-Part-2-Tranquility.htm"}
 ];
 function dailyReflection(){let [y,m,d]=selected.split('-').map(Number);let index=((Math.floor(Date.UTC(y,m-1,d)/86400000)%trustReflections.length)+trustReflections.length)%trustReflections.length;let reflection=trustReflections[index];$('#dailyReflection').textContent=reflection.text;$('.daily-trust').href=reflection.url;$('#reflectionSource').textContent=reflection.source}
 const writingModes={notes:'type',menu:'type'};
@@ -204,8 +56,8 @@ function updateWritingModes(){for(const id of ['notes','menu']){const typing=wri
 function syncPlannerHeader(){const title=typeof state.plannerTitle==='string'?state.plannerTitle:'Today is The Day',subtitle=typeof state.plannerSubtitle==='string'?state.plannerSubtitle:'Small steps, steady progress';$('#plannerTitleText').textContent=title;$('#plannerSubtitleText').textContent=subtitle}
 const headingDialog=document.createElement('dialog');headingDialog.id='plannerHeadingDialog';headingDialog.className='planner-heading-dialog';headingDialog.innerHTML='<div class=account-heading><h2>Personalize your heading</h2><button type=button aria-label=Close>×</button></div><form><label>Planner title<input name=title maxlength=60 required></label><label>Subtitle<input name=subtitle maxlength=100></label><div class=account-actions><button type=button data-cancel>Cancel</button><button type=submit>Save</button></div></form>';document.body.append(headingDialog);const headingForm=headingDialog.querySelector('form'),headingTitle=headingForm.elements.title,headingSubtitle=headingForm.elements.subtitle;function openHeadingEditor(){headingTitle.value=typeof state.plannerTitle==='string'?state.plannerTitle:'Today is The Day';headingSubtitle.value=typeof state.plannerSubtitle==='string'?state.plannerSubtitle:'Small steps, steady progress';headingDialog.showModal();headingTitle.focus()}
 $('#plannerTitleEdit').onclick=openHeadingEditor;$('#plannerSubtitleEdit').onclick=openHeadingEditor;headingDialog.querySelector('.account-heading button').onclick=()=>headingDialog.close();headingDialog.querySelector('[data-cancel]').onclick=()=>headingDialog.close();headingForm.onsubmit=e=>{e.preventDefault();state.plannerTitle=headingTitle.value.trim()||'Today is The Day';state.plannerSubtitle=headingSubtitle.value.trim();save();syncPlannerHeader();headingDialog.close()};
-function render(){syncPlannerHeader();if(selected>=iso(new Date()))rollUnfinishedTodos(selected);dailyReflection();$('#date').value=selected;let current=new Date(selected+'T12:00:00');$('.menu').hidden=current.getDay()===5;updateWritingModes();$('#longDate').textContent=dateLabel(selected,state.plannerSettings?.language||undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});$('#hebrewDate').textContent=new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).format(current);lists();tracker();Object.keys(pads).forEach(loadPad)}
-$('#date').onchange=e=>{if(e.target.value){selected=e.target.value;render()}};for(let [id,n]of [['prev',-1],['next',1]])$('#'+id).onclick=()=>{let d=new Date(selected+'T12:00:00');d.setDate(d.getDate()+n);selected=iso(d);render()};$('#addTodo').onsubmit=e=>{e.preventDefault();let input=e.target.querySelector('input'),text=input.value.trim();if(text){const frequency=$('#todoRepeat').value;if(frequency==='none')day(selected).todos.push({text,done:false});else{state.recurring ||= [];state.recurring.push({id:crypto.randomUUID(),text,frequency,start:selected})}input.value='';save();lists()}};
+function render(){syncPlannerHeader();if(selected>=iso(new Date()))rollUnfinishedTodos(selected);day(selected).keepInMind ||= [];dailyReflection();$('#date').value=selected;let current=new Date(selected+'T12:00:00');$('.menu').hidden=current.getDay()===5;updateWritingModes();$('#longDate').textContent=dateLabel(selected,state.plannerSettings?.language||undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});$('#hebrewDate').textContent=new Intl.DateTimeFormat('he-IL-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).format(current);lists();tracker();Object.keys(pads).forEach(loadPad)}
+$('#date').onchange=e=>{if(e.target.value){selected=e.target.value;render()}};for(let [id,n]of [['prev',-1],['next',1]])$('#'+id).onclick=()=>{let d=new Date(selected+'T12:00:00');d.setDate(d.getDate()+n);selected=iso(d);render()};$('#addTodo').onsubmit=e=>{e.preventDefault();let input=e.target.querySelector('input'),text=input.value.trim();if(text){const frequency=$('#todoRepeat').value;if(frequency==='none')day(selected).todos.push({id:crypto.randomUUID(),text,done:false});else{state.recurring ||= [];state.recurring.push({id:crypto.randomUUID(),text,frequency,start:selected})}input.value='';save();lists()}};
 $('#export').onclick=()=>{let url=URL.createObjectURL(new Blob([JSON.stringify(state)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='today-is-the-day-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 $('#import').onchange=async e=>{try{let data=JSON.parse(await e.target.files[0].text());if(!data.days||Array.isArray(data.days)||typeof data.days!=='object')throw Error();for(let [k,d]of Object.entries(data.days)){if(!/^\d{4}-\d{2}-\d{2}$/.test(k)||(!Array.isArray(d.morning)&&(!d.morning||typeof d.morning!=='object'))||(!Array.isArray(d.care)&&(!d.care||typeof d.care!=='object'))||!Array.isArray(d.todos)||!d.ink||typeof d.ink!=='object'||d.todos.some(t=>typeof t.text!=='string')||Object.values(d.ink).some(s=>typeof s!=='string'||!s.startsWith('data:image/png;base64,')))throw Error()}if(confirm('Replace local planner data with this backup?')){state=data;save();render()}}catch(err){alert('This file is not a valid planner backup.')}e.target.value=''};
 render();if(!storageOK)$('#saveStatus').textContent='Storage unavailable — use Export backup';if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{$('#installHint').textContent='Offline setup unavailable. Keep this preview open while testing.'});
