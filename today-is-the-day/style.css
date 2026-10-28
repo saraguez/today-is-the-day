@@ -422,3 +422,6 @@ body[data-theme=dojo] .weekly-section{grid-column:4;grid-row:6}
 body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-row:7}
 body[data-theme=dojo] footer{grid-row:8}
 @media(max-width:1050px){body[data-theme=dojo] .keep-in-mind-section{grid-column:2;grid-row:6}body[data-theme=dojo] #weekGlance{grid-column:2;grid-row:7}body[data-theme=dojo] #dailyReview{grid-column:3;grid-row:7}body[data-theme=dojo] .home{grid-column:2;grid-row:8}body[data-theme=dojo] .notes-section{grid-column:3;grid-row:8}body[data-theme=dojo] .weekly-section{grid-column:2;grid-row:9}body[data-theme=dojo] .weekly-review:not(#dailyReview){grid-column:3;grid-row:9}body[data-theme=dojo] footer{grid-row:10}}
+
+/* Keep the two task lists together in the phone layout. Equal order follows their DOM order. */
+@media(max-width:700px){.keep-in-mind-section{order:3}}
